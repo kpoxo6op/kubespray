@@ -29,6 +29,7 @@ inventory/*
 !inventory/local
 !inventory/sample
 inventory/*/artifacts/
+!inventory/soycluster/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
