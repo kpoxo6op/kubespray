@@ -205,9 +205,22 @@ metallb_config:
     primary:
       ip_range:
         - 192.168.1.120-192.168.1.140
-# kubectl get svc -n ingress-nginx
-# NAME            TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-# ingress-nginx   LoadBalancer   10.233.24.165   192.168.1.120   80:31917/TCP,443:32697/TCP   4h28m
+# (soyspray-venv) boris@DESKTOP-C3GHUQA:~/code/soyspray$ kubectl get svc -A
+# NAMESPACE        NAME                                      TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+# argocd           argocd-applicationset-controller          ClusterIP      10.233.9.174    <none>          7000/TCP,8080/TCP            4d4h
+# argocd           argocd-dex-server                         ClusterIP      10.233.36.184   <none>          5556/TCP,5557/TCP,5558/TCP   4d4h
+# argocd           argocd-metrics                            ClusterIP      10.233.41.108   <none>          8082/TCP                     4d4h
+# argocd           argocd-notifications-controller-metrics   ClusterIP      10.233.6.13     <none>          9001/TCP                     4d4h
+# argocd           argocd-redis                              ClusterIP      10.233.12.166   <none>          6379/TCP                     4d4h
+# argocd           argocd-repo-server                        ClusterIP      10.233.13.178   <none>          8081/TCP,8084/TCP            4d4h
+# argocd           argocd-server                             LoadBalancer   10.233.52.3     192.168.1.121   80:30610/TCP                 4d4h
+# argocd           argocd-server-metrics                     ClusterIP      10.233.25.67    <none>          8083/TCP                     4d4h
+# default          kubernetes                                ClusterIP      10.233.0.1      <none>          443/TCP                      4d4h
+# ingress-nginx    ingress-nginx                             LoadBalancer   10.233.7.97     192.168.1.120   80:32711/TCP,443:32124/TCP   4d4h
+# kube-system      coredns                                   ClusterIP      10.233.0.3      <none>          53/UDP,53/TCP,9153/TCP       4d4h
+# metallb-system   webhook-service                           ClusterIP      10.233.63.154   <none>          443/TCP                      4d4h
+# pihole           pihole-dns                                LoadBalancer   10.233.50.225   192.168.1.122   53:30325/TCP,53:30325/UDP    4h47m
+# pihole           pihole-web                                LoadBalancer   10.233.47.117   192.168.1.122   80:30722/TCP                 5h35m
       auto_assign: true
 #     pool1:
 #       ip_range:
