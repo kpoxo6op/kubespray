@@ -164,15 +164,15 @@ cert_manager_enabled: true
 #   -----END CERTIFICATE-----
 # cert_manager_leader_election_namespace: kube-system
 
-# cert_manager_dns_policy: "ClusterFirst"
-# cert_manager_dns_config:
-#   nameservers:
-#     - "1.1.1.1"
-#     - "8.8.8.8"
+cert_manager_dns_policy: "ClusterFirst"
+cert_manager_dns_config:
+  nameservers:
+    - "1.1.1.1"
+    - "8.8.8.8"
 
-# cert_manager_controller_extra_args:
-#   - "--dns01-recursive-nameservers-only=true"
-#   - "--dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53"
+cert_manager_controller_extra_args:
+  - "--dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53"
+  - "--dns01-recursive-nameservers-only=true"
 
 # MetalLB deployment
 metallb_enabled: true
