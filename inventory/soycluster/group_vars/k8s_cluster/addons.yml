@@ -206,6 +206,10 @@ metallb_config:
       ip_range:
         - 192.168.1.120-192.168.1.140
       auto_assign: true
+    torrent:
+      ip_range:
+        - 192.168.1.240-192.168.1.240
+      auto_assign: false
 #     pool1:
 #       ip_range:
 #         - 10.6.0.0/16
@@ -216,6 +220,7 @@ metallb_config:
 #       auto_assign: true
   layer2:
     - primary
+    - torrent
 #   layer3:
 #     defaults:
 #       peer_port: 179
