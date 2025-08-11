@@ -204,11 +204,11 @@ metallb_config:
   address_pools:
     primary:
       ip_range:
-        - 192.168.1.120-192.168.1.140
+        - 192.168.50.200-192.168.50.238
       auto_assign: true
     torrent:
       ip_range:
-        - 192.168.1.240-192.168.1.240
+        - 192.168.50.239-192.168.50.239
       auto_assign: false
 #     pool1:
 #       ip_range:
