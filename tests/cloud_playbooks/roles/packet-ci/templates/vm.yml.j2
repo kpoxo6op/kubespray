@@ -32,6 +32,10 @@ spec:
         - disk:
             bus: virtio
           name: cloudinitvolume
+        - disk:
+            bus: virtio
+          name: releases
+          serial: '2825A83CBDC8A32D5E'
       interfaces:
       - name: default
         bridge: {}
@@ -55,13 +59,8 @@ spec:
       containerDisk:
         image: quay.io/kubespray/vm-{{ cloud_image }}
     - name: cloudinitvolume
-      cloudInitNoCloud:
-        userData: |
-          #cloud-config
-           users:
-             - name: {{ lookup('env', 'ANSIBLE_REMOTE_USER') }}
-               sudo: ALL=(ALL) NOPASSWD:ALL
-               shell: /bin/bash
-               lock_passwd: False
-               ssh_authorized_keys:
-                 - {{ ssh_key.public_key }}
+      cloudInit{{ 'ConfigDrive' if cloud_image.startswith('flatcar') else 'NoCloud' }}:
+        userDataBase64: '{{ ((ignition_config | to_json) if cloud_image.startswith('flatcar') else cloudinit_config) | b64encode }}'
+    - name: releases
+      emptyDisk:
+        capacity: '{{ releases_disk_size }}'
