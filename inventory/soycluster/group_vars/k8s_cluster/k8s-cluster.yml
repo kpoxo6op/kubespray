@@ -175,6 +175,12 @@ ndots: 2
 dns_mode: coredns
 # Set manual server if using a custom cluster DNS server
 # manual_dns_server: 10.x.x.x
+# Explicit upstreams keep CoreDNS/NodeLocalDNS from forwarding public lookups to
+# /etc/resolv.conf, which can contain NodeLocalDNS itself plus transient router
+# or Tailscale resolvers.
+upstream_dns_servers:
+  - 1.1.1.1
+  - 9.9.9.9
 # Enable nodelocal dns cache
 enable_nodelocaldns: true
 enable_nodelocaldns_secondary: false
@@ -183,6 +189,13 @@ nodelocaldns_health_port: 9254
 nodelocaldns_second_health_port: 9256
 nodelocaldns_bind_metrics_host_ip: false
 nodelocaldns_secondary_skew_seconds: 5
+nodelocaldns_external_zones:
+  - zones:
+      - lan
+      - soyspray.vip
+    nameservers:
+      - 192.168.20.1
+    cache: 30
 # nodelocaldns_external_zones:
 # - zones:
 #   - example.com
