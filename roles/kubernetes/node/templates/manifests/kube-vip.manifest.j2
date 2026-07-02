@@ -137,5 +137,6 @@ spec:
   volumes:
   - hostPath:
       path: /etc/kubernetes/{{kube_vip_admin_conf}}
+      type: FileOrCreate
     name: kubeconfig
 status: {}

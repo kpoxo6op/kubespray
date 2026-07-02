@@ -40,6 +40,26 @@
   debug:
     msg: "{{ kubeadm_already_run.stat.exists }}"
 
+- name: Check for kube-vip-created admin.conf directory
+  stat:
+    path: "{{ kube_config_dir }}/admin.conf"
+    get_attributes: false
+    get_checksum: false
+    get_mime: false
+  register: kubeadm_admin_conf_path
+  when:
+    - inventory_hostname != first_kube_control_plane
+    - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
+
+- name: Remove kube-vip-created admin.conf directory
+  file:
+    path: "{{ kube_config_dir }}/admin.conf"
+    state: absent
+  when:
+    - inventory_hostname != first_kube_control_plane
+    - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
+    - kubeadm_admin_conf_path.stat.isdir | default(false)
+
 - name: Reset cert directory
   shell: >-
     if [ -f /etc/kubernetes/manifests/kube-apiserver.yaml ]; then
