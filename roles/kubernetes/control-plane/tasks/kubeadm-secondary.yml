@@ -60,6 +60,16 @@
     - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
     - kubeadm_admin_conf_path.stat.isdir | default(false)
 
+- name: Remove kube-vip-created empty admin.conf file
+  file:
+    path: "{{ kube_config_dir }}/admin.conf"
+    state: absent
+  when:
+    - inventory_hostname != first_kube_control_plane
+    - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
+    - kubeadm_admin_conf_path.stat.isreg | default(false)
+    - kubeadm_admin_conf_path.stat.size | default(1) == 0
+
 - name: Check if kubelet is already configured for worker promotion
   stat:
     path: "{{ kube_config_dir }}/kubelet.conf"
