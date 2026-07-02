@@ -43,6 +43,14 @@
     - inventory_hostname == groups['kube_control_plane'] | first
     - (stat_kube_vip_super_admin.stat.exists and stat_kube_vip_super_admin.stat.isreg) or (not kubeadm_already_run.stat.exists )
 
+- name: Kube-vip | Cleanup potentially deployed local API proxies
+  file:
+    path: "{{ kube_manifest_dir }}/{{ item }}"
+    state: absent
+  loop:
+    - nginx-proxy.yml
+    - haproxy.yml
+
 - name: Kube-vip | Write static pod
   template:
     src: manifests/kube-vip.manifest.j2
