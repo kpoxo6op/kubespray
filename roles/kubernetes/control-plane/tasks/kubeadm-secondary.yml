@@ -60,6 +60,17 @@
     - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
     - kubeadm_admin_conf_path.stat.isdir | default(false)
 
+- name: Check if kubelet is already configured for worker promotion
+  stat:
+    path: "{{ kube_config_dir }}/kubelet.conf"
+    get_attributes: false
+    get_checksum: false
+    get_mime: false
+  register: kubeadm_worker_kubelet_conf
+  when:
+    - inventory_hostname != first_kube_control_plane
+    - kubeadm_already_run is not defined or not kubeadm_already_run.stat.exists
+
 - name: Reset cert directory
   shell: >-
     if [ -f /etc/kubernetes/manifests/kube-apiserver.yaml ]; then
@@ -104,10 +115,28 @@
     - not kubeadm_already_run.stat.exists
 
 - name: Joining control plane node to the cluster.
+  vars:
+    promoted_worker_preflight_errors:
+      - FileAvailable--etc-kubernetes-kubelet.conf
+      - Port-10250
+    kubeadm_join_ignore_preflight_errors: >-
+      {{
+        (
+          kubeadm_ignore_preflight_errors
+          + (
+            promoted_worker_preflight_errors
+            if kubeadm_worker_kubelet_conf is defined
+            and kubeadm_worker_kubelet_conf.stat.exists | default(false)
+            else []
+          )
+        )
+        | flatten
+        | unique
+      }}
   command: >-
     {{ bin_dir }}/kubeadm join
     --config {{ kube_config_dir }}/kubeadm-controlplane.yaml
-    --ignore-preflight-errors={{ kubeadm_ignore_preflight_errors | join(',') }}
+    --ignore-preflight-errors={{ kubeadm_join_ignore_preflight_errors | join(',') }}
     --skip-phases={{ kubeadm_join_phases_skip | join(',') }}
   environment:
     PATH: "{{ bin_dir }}:{{ ansible_env.PATH }}"
