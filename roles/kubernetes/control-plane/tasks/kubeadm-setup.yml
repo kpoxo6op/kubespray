@@ -166,6 +166,7 @@
     {{ bin_dir }}/kubeadm
     init phase certs apiserver
     --config={{ kube_config_dir }}/kubeadm-config.yaml
+  notify: Control plane | Restart apiserver
   when:
     - kubeadm_already_run.stat.exists
     - apiserver_sans_ip_check.changed or apiserver_sans_host_check.changed
