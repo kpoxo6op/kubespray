@@ -182,6 +182,9 @@ dns_min_replicas: 2
 upstream_dns_servers:
   - 1.1.1.1
   - 9.9.9.9
+# Keep the public Authentik issuer on the LAN ingress for in-cluster clients.
+dns_etchosts: |
+  192.168.20.20 auth.soyspray.vip
 # Enable nodelocal dns cache
 enable_nodelocaldns: true
 enable_nodelocaldns_secondary: false
