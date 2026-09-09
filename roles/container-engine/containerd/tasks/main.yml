@@ -43,15 +43,35 @@
   notify: Restart containerd
   when: http_proxy is defined or https_proxy is defined
 
+- name: Containerd | Check whether ctr is already installed
+  stat:
+    path: "{{ containerd_bin_dir }}/ctr"
+  register: containerd_ctr_binary
+  check_mode: false
+
+- name: Containerd | Require ctr outside check mode
+  assert:
+    that:
+      - ansible_check_mode or containerd_ctr_binary.stat.exists
+
 - name: Containerd | Generate default base_runtime_spec
   register: ctr_oci_spec
   command: "{{ containerd_bin_dir }}/ctr oci spec"
   check_mode: false
   changed_when: false
+  when: containerd_ctr_binary.stat.exists
 
 - name: Containerd | Store generated default base_runtime_spec
   set_fact:
     containerd_default_base_runtime_spec: "{{ ctr_oci_spec.stdout | from_json }}"
+  when: containerd_ctr_binary.stat.exists
+
+- name: Containerd | Use a check-mode base_runtime_spec placeholder
+  set_fact:
+    containerd_default_base_runtime_spec: {}
+  when:
+    - ansible_check_mode
+    - not containerd_ctr_binary.stat.exists
 
 - name: Containerd | Write base_runtime_specs
   copy:
