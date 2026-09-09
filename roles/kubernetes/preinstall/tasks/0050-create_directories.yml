@@ -60,6 +60,9 @@
     dest: "{{ kube_cert_compat_dir }}"
     state: link
     mode: "0755"
+    # The source directory is only predicted by the preceding task in check
+    # mode. Permit the link prediction without weakening the applied run.
+    force: "{{ ansible_check_mode }}"
   when:
     - ('k8s_cluster' in group_names)
     - kube_cert_dir != kube_cert_compat_dir
