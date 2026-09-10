@@ -4,9 +4,11 @@
   changed_when: false
   register: cri_completion
   check_mode: false
+  when: not ansible_check_mode
 
 - name: Install crictl completion
   copy:
     dest: /etc/bash_completion.d/crictl
     content: "{{ cri_completion.stdout }}"
     mode: "0644"
+  when: not ansible_check_mode
