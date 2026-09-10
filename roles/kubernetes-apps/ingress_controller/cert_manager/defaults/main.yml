@@ -1,5 +1,6 @@
 ---
 cert_manager_namespace: "cert-manager"
+cert_manager_remove_legacy_namespace: false
 cert_manager_user: 1001
 cert_manager_tolerations: []
 cert_manager_affinity: {}
